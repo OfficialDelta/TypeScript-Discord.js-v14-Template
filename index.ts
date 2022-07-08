@@ -20,9 +20,10 @@ global.client = new Client({
     partials: ['CHANNEL'],
 })
 
-// Set each command in the commands folder as a command in the client.commands collection
 client.commands = new Collection()
+client.msgCommands = new Collection()
 
+// Set each command in the commands folder as a command in the client.commands collection
 const commandFiles: string[] = readdirSync('./commands').filter((file) =>
     file.endsWith('.js')
 )
@@ -31,9 +32,6 @@ for (const file of commandFiles) {
         require(`./commands/${file}`) as ApplicationCommand
     client.commands.set(command.name, command)
 }
-
-// same as above but for message commands
-client.msgCommands = new Collection()
 
 const msgCommandFiles: string[] = readdirSync('./messageCommands').filter(
     (file) => file.endsWith('.js')

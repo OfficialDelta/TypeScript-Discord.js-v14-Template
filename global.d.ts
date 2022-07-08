@@ -5,8 +5,8 @@ import ApplicationCommand from '../templates/ApplicationCommand'
 import MessageCommand from '../templates/MessageCommand'
 
 interface DiscordClient extends Client {
-    commands: Collection<string, ApplicationCommand>
-    msgCommands: Collection<string, MessageCommand>
+    commands?: Collection<string, ApplicationCommand>
+    msgCommands?: Collection<string, MessageCommand>
 }
 
 declare global {
