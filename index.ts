@@ -25,7 +25,7 @@ client.msgCommands = new Collection()
 
 // Set each command in the commands folder as a command in the client.commands collection
 const commandFiles: string[] = readdirSync('./commands').filter((file) =>
-    file.endsWith('.js')
+    file.endsWith('.ts')
 )
 for (const file of commandFiles) {
     const command: ApplicationCommand =
@@ -34,7 +34,7 @@ for (const file of commandFiles) {
 }
 
 const msgCommandFiles: string[] = readdirSync('./messageCommands').filter(
-    (file) => file.endsWith('.js')
+    (file) => file.endsWith('.ts')
 )
 for (const file of msgCommandFiles) {
     const command: MessageCommand =
@@ -44,7 +44,7 @@ for (const file of msgCommandFiles) {
 
 // Event handling
 const eventFiles: string[] = readdirSync('./events').filter((file) =>
-    file.endsWith('.js')
+    file.endsWith('.ts')
 )
 
 for (const file of eventFiles) {
