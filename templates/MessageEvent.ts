@@ -9,7 +9,11 @@ export default class MessageEvent extends Event {
      *      execute: (message: Message) => Promise<void>
      *  }} object
      */
-    constructor(object: {name: string, once?: boolean, execute: (message: Message) => Promise<void>}) {
+    constructor(object: {
+        name: string
+        once?: boolean
+        execute: (message: Message) => Promise<void>
+    }) {
         super(object)
     }
 }

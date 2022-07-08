@@ -13,7 +13,7 @@ export default class Event {
      *      execute: Function
      *  }} object
      */
-    constructor(object: {name: string, once?: boolean, execute: Function}) {
+    constructor(object: { name: string; once?: boolean; execute: Function }) {
         this.name = object.name
         this.once = object.once ?? false
         this.execute = object.execute

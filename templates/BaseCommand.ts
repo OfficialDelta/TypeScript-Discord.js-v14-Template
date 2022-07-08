@@ -14,7 +14,11 @@ export default class BaseCommand {
      *      execute: Function
      *  }} object
      */
-    constructor(object: {name: string, description: string, execute: Function}) {
+    constructor(object: {
+        name: string
+        description: string
+        execute: Function
+    }) {
         this.name = object.name
         this.description = object.description
         this.execute = object.execute

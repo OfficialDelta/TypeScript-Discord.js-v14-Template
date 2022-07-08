@@ -9,7 +9,11 @@ export default class InteractionEvent extends Event {
      *      execute: (interaction: Interaction) => Promise<void>
      *  }} object
      */
-    constructor(object: {name: string, once?: boolean, execute: (interaction: Interaction) => Promise<void>}) {
+    constructor(object: {
+        name: string
+        once?: boolean
+        execute: (interaction: Interaction) => Promise<void>
+    }) {
         super(object)
     }
 }

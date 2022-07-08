@@ -6,5 +6,5 @@ export default new ApplicationCommand({
     type: 'CHAT_INPUT',
     async execute(interaction): Promise<void> {
         await interaction.reply('Pong!')
-    }
+    },
 })

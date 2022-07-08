@@ -15,7 +15,12 @@ export default class MessageCommand extends BaseCommand {
      *      execute: (message: Message, args: string[]) => Promise<void>
      *  }} options - The options for the message command
      */
-    constructor(options: {name: string, description: string, aliases?: string[], execute: (message: Message, args: string[]) => Promise<void>}) {
+    constructor(options: {
+        name: string
+        description: string
+        aliases?: string[]
+        execute: (message: Message, args: string[]) => Promise<void>
+    }) {
         super(options)
         this.aliases = options.aliases
     }

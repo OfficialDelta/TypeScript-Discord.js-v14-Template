@@ -23,10 +23,13 @@ export default new MessageCommand({
             // global deployment
 
             let commandData: ApplicationCommandData[] = []
-            let permissionsData: {name: string, permissions: ApplicationCommand['permissions']}[] = []
+            let permissionsData: {
+                name: string
+                permissions: ApplicationCommand['permissions']
+            }[] = []
             let inGuild: boolean = message.guildId ? true : false
 
-            const files: string[] = readdirSync('./commands').filter(file =>
+            const files: string[] = readdirSync('./commands').filter((file) =>
                 file.endsWith('.js')
             )
 
@@ -57,7 +60,7 @@ export default new MessageCommand({
                 // set the permissions for each command for that guild (permissions will only work in said guild, if you need global permissions then you'll have to manually do it)
                 for (const permissionInfo of permissionsData) {
                     const command = commands.find(
-                        command => command.name === permissionInfo.name
+                        (command) => command.name === permissionInfo.name
                     )
 
                     command?.permissions.set({
@@ -72,7 +75,10 @@ export default new MessageCommand({
             // guild deployment
 
             let commandData: ApplicationCommandData[] = []
-            let permissionsData: {name: string, permissions: ApplicationCommand['permissions']}[] = []
+            let permissionsData: {
+                name: string
+                permissions: ApplicationCommand['permissions']
+            }[] = []
             let inGuild: boolean = message.guildId ? true : false
 
             if (!inGuild) {
@@ -80,7 +86,7 @@ export default new MessageCommand({
                 return
             }
 
-            const files: string[] = readdirSync('./commands').filter(file =>
+            const files: string[] = readdirSync('./commands').filter((file) =>
                 file.endsWith('.js')
             )
 
@@ -108,7 +114,7 @@ export default new MessageCommand({
 
             for (const permissionInfo of permissionsData) {
                 const command = commands.find(
-                    command => command.name === permissionInfo.name
+                    (command) => command.name === permissionInfo.name
                 )
 
                 command?.permissions.set({
@@ -118,5 +124,5 @@ export default new MessageCommand({
 
             message.reply('Deploying!')
         }
-    }
+    },
 })
