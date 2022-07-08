@@ -12,14 +12,14 @@ export default class MessageCommand extends BaseCommand {
      *      name: string,
      *      description: string,
      *      aliases?: string[],
-     *      execute: (message: Message, args: string[]) => Promise<void>
+     *      execute: (message: Message, args: string[]) => Promise<void> | void
      *  }} options - The options for the message command
      */
     constructor(options: {
         name: string
         description: string
         aliases?: string[]
-        execute: (message: Message, args: string[]) => Promise<void>
+        execute: (message: Message, args: string[]) => Promise<void> | void
     }) {
         super(options)
         this.aliases = options.aliases

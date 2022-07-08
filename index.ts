@@ -1,10 +1,14 @@
-require('dotenv').config()
+/* eslint-disable @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
+
+import dotenv from 'dotenv'
+dotenv.config()
+
 import { Client, Intents, Collection } from 'discord.js'
 import { readdirSync } from 'fs'
 import ApplicationCommand from './templates/ApplicationCommand'
 import Event from './templates/Event'
 import MessageCommand from './templates/MessageCommand'
-const token = process.env.TOKEN ?? require('./config.json').token
+const token: string = process.env.TOKEN as string
 
 // Discord client object
 global.client = new Client({
@@ -23,7 +27,8 @@ const commandFiles: string[] = readdirSync('./commands').filter((file) =>
     file.endsWith('.js')
 )
 for (const file of commandFiles) {
-    const command: ApplicationCommand = require(`./commands/${file}`)
+    const command: ApplicationCommand =
+        require(`./commands/${file}`) as ApplicationCommand
     client.commands.set(command.name, command)
 }
 
@@ -34,7 +39,8 @@ const msgCommandFiles: string[] = readdirSync('./messageCommands').filter(
     (file) => file.endsWith('.js')
 )
 for (const file of msgCommandFiles) {
-    const command: MessageCommand = require(`./messageCommands/${file}`)
+    const command: MessageCommand =
+        require(`./messageCommands/${file}`) as MessageCommand
     client.msgCommands.set(command.name, command)
 }
 
@@ -44,7 +50,7 @@ const eventFiles: string[] = readdirSync('./events').filter((file) =>
 )
 
 for (const file of eventFiles) {
-    const event: Event = require(`./events/${file}`)
+    const event: Event = require(`./events/${file}`) as Event
     if (event.once) {
         client.once(event.name, (...args) => event.execute(...args))
     } else {
@@ -52,4 +58,4 @@ for (const file of eventFiles) {
     }
 }
 
-client.login(token)
+await client.login(token)

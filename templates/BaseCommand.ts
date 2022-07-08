@@ -5,19 +5,19 @@
 export default class BaseCommand {
     name: string
     description: string
-    execute: Function
+    execute: (...args: any) => Promise<void> | void
 
     /**
      * @param {{
      *      name: string,
      *      description: string,
-     *      execute: Function
+     *      execute: (...args: any) => Promise<void> | void
      *  }} object
      */
     constructor(object: {
         name: string
         description: string
-        execute: Function
+        execute: (...args: any) => Promise<void> | void
     }) {
         this.name = object.name
         this.description = object.description
@@ -39,9 +39,9 @@ export default class BaseCommand {
     }
 
     /**
-     * @param {Function} executeFunction - The function
+     * @param {(...args: any) => Promise<void> | void} executeFunction - The function
      */
-    setExecute(executeFunction: Function): void {
+    setExecute(executeFunction: (...args: any) => Promise<void> | void): void {
         this.execute = executeFunction
     }
 }

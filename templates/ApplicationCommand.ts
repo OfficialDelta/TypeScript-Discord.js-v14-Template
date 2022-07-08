@@ -56,7 +56,7 @@ export default class ApplicationCommand extends BaseCommand {
      *      options?: ApplicationCommandOptions[],
      *      defaultPermission?: boolean,
      *      type: 'CHAT_INPUT'|'USER'|'MESSAGE',
-     *      execute: (interaction: CommandInteraction) => Promise<void>
+     *      execute: (interaction: CommandInteraction) => Promise<void> | void
      *  }} options - The options for the slash command
      */
     constructor(options: {
@@ -66,7 +66,7 @@ export default class ApplicationCommand extends BaseCommand {
         options?: ApplicationCommandOptions[]
         defaultPermission?: boolean
         type: 'CHAT_INPUT' | 'USER' | 'MESSAGE'
-        execute: (interaction: CommandInteraction) => Promise<void>
+        execute: (interaction: CommandInteraction) => Promise<void> | void
     }) {
         super(options)
         this.permissions = options.permissions ?? []
