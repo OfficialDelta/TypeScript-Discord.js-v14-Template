@@ -1,0 +1,11 @@
+const MessageCommand = require('../templates/MessageCommand')
+
+module.exports = new MessageCommand({
+    name: 'ping', // command name
+    description: 'Ping!', // command description
+    async execute(message, args) {
+        // code to run on command execution
+        // for example:
+        await message.channel.send('Pong.')
+    },
+})
