@@ -1,6 +1,6 @@
-const SubCommand = require('../../templates/SubCommand')
+import SubCommand from '../../templates/SubCommand'
 
-module.exports = new SubCommand({
+export default new SubCommand({
     async execute(interaction) {
         const input = interaction.options.get('input')?.value ?? false
 

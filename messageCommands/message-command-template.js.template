@@ -1,6 +1,6 @@
-const MessageCommand = require('../templates/MessageCommand')
+import MessageCommand from '../templates/MessageCommand'
 
-module.exports = new MessageCommand({
+export default new MessageCommand({
     name: 'ping', // command name
     description: 'Ping!', // command description
     async execute(message, args) {

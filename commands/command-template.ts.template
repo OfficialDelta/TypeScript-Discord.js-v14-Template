@@ -1,6 +1,6 @@
 import ApplicationCommand from '../templates/ApplicationCommand'
 
-module.exports = new ApplicationCommand({
+export default new ApplicationCommand({
     name: 'command-name',
     description: 'command-description',
     permissions: [
