@@ -1,14 +1,25 @@
-import { CommandInteraction, InteractionCollector, Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageEmbed, TextChannel } from 'discord.js'
+import {
+    CommandInteraction,
+    InteractionCollector,
+    Message,
+    MessageActionRow,
+    MessageButton,
+    MessageComponentInteraction,
+    MessageEmbed,
+    TextChannel,
+} from 'discord.js'
 import EventEmitter from 'events'
 
+type ButtonAction = {
+    customId: string
+    action: string | (() => void)
+}
+
 type MenuPage = {
-    name: string,
-    content: MessageEmbed,
-    actionRows: MessageActionRow[],
-    buttonActions: {
-        customId: string,
-        action: (Function|string)
-    }[]
+    name: string
+    content: MessageEmbed
+    actionRows: MessageActionRow[]
+    buttonActions: ButtonAction[]
 }
 
 /**
@@ -25,7 +36,7 @@ export default class Menu extends EventEmitter {
     pageIndex: number
     menu?: Message
     collector?: InteractionCollector<MessageComponentInteraction>
-    
+
     /**
      * @param {TextChannel} channel - The channel the menu will be sent in
      * @param {string} userId - The ID of the user who is allowed to interact with the menu
@@ -33,12 +44,19 @@ export default class Menu extends EventEmitter {
      * @param {Number} timeout - The timeout of the menu
      * @param {Number} idle - The idle time of the menu before it stops listening for button interactions
      * @param {CommandInteraction} interaction - The interaction that triggered the menu
-     * 
+     *
      * @remarks
      * Blacklisted page names are: `first, last, previous, next, stop, delete`.
      * These names perform special functions and should only be used as reaction destinations.
      */
-    constructor(channel: TextChannel, userId: string, pageArray: MenuPage[], timeout: number = 60 * 1000, idle: number = 15 * 1000, interaction: CommandInteraction) {
+    constructor(
+        channel: TextChannel,
+        userId: string,
+        pageArray: MenuPage[],
+        timeout: number = 60 * 1000,
+        idle: number = 15 * 1000,
+        interaction: CommandInteraction
+    ) {
         super()
         this.channel = channel
         this.userId = userId
@@ -65,9 +83,16 @@ export default class Menu extends EventEmitter {
         let menu: Message
 
         if (!this.interaction) {
-            menu = await this.channel.send({ embeds: [this.currentPage.content], components: this.currentPage.actionRows })
+            menu = await this.channel.send({
+                embeds: [this.currentPage.content],
+                components: this.currentPage.actionRows,
+            })
         } else {
-            menu = await this.interaction.reply({ embeds: [this.currentPage.content], components: this.currentPage.actionRows, fetchReply: true }) as Message
+            menu = (await this.interaction.reply({
+                embeds: [this.currentPage.content],
+                components: this.currentPage.actionRows,
+                fetchReply: true,
+            })) as Message
         }
 
         this.menu = menu
@@ -77,15 +102,24 @@ export default class Menu extends EventEmitter {
     /**
      * Starts listening for button interactions
      */
-    async startButtons(): Promise<void> {
-        const filter = (i: MessageComponentInteraction) => i.user.id === this.userId
+    startButtons(): void {
+        const filter = (i: MessageComponentInteraction) =>
+            i.user.id === this.userId
 
-        this.collector = this.menu!.createMessageComponentCollector({ filter, time: this.timeout, idle: this.idle })
+        if (!this.menu) throw new Error('Menu is not started')
 
-        this.collector.on('collect', i => {
+        this.collector = this.menu.createMessageComponentCollector({
+            filter,
+            time: this.timeout,
+            idle: this.idle,
+        })
+
+        this.collector.on('collect', (i): void => {
             i.deferUpdate()
             const customId = (i.component as MessageButton).customId
-            const action = this.currentPage.buttonActions.find(b => b.customId === customId)?.action
+            const action = this.currentPage.buttonActions.find(
+                (b) => b.customId === customId
+            )?.action
 
             if (!action) throw Error('Action not found')
 
@@ -119,15 +153,18 @@ export default class Menu extends EventEmitter {
     /**
      * Stops listening for button interactions and removes the buttons from the menu
      */
-    async stop(): Promise<void> {
-        this.collector?.stop()
-        this.menu?.edit({ embeds: [this.currentPage.content], components: [] })
+    stop(): void {
+        if (!this.menu) throw new Error('Menu is not started')
+        if (!this.collector) throw new Error('Collector is not started')
+
+        this.collector.stop()
+        this.menu.edit({ embeds: [this.currentPage.content], components: [] })
     }
 
     /**
      * Deletes the menu
      */
-    async delete(): Promise<void> {
+    delete(): void {
         this.menu?.delete()
     }
 
@@ -135,19 +172,24 @@ export default class Menu extends EventEmitter {
      * Sets the current page to the page with the given index or name
      * @param {number | string} arg - The index/name of the page
      */
-    async setPage(page: number): Promise<void> 
-    async setPage(name: string): Promise<void>
-    async setPage(arg: number | string): Promise<void> {
+    setPage(page: number): void
+    setPage(name: string): void
+    setPage(arg: number | string): void {
+        if (!this.menu) throw new Error('Menu is not started')
+
         if (typeof arg === 'number') {
             this.pageIndex = arg
             this.currentPage = this.pageArray[arg]
         } else {
-            this.pageIndex = this.pageArray.findIndex(p => p.name === arg)
+            this.pageIndex = this.pageArray.findIndex((p) => p.name === arg)
             this.currentPage = this.pageArray[this.pageIndex]
         }
 
         this.emit('pageChange', this.currentPage)
 
-        this.menu!.edit({ embeds: [this.currentPage.content], components: this.currentPage.actionRows })
+        this.menu.edit({
+            embeds: [this.currentPage.content],
+            components: this.currentPage.actionRows,
+        })
     }
 }
