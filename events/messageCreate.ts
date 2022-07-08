@@ -2,7 +2,7 @@ import MessageCommand from '../templates/MessageCommand'
 import MessageEvent from '../templates/MessageEvent'
 const { prefix } = require('../config.json')
 
-module.exports = new MessageEvent({
+export default new MessageEvent({
     name: 'messageCreate',
     async execute(message) {
         // Handles non-slash commands, only recommended for deploy commands
@@ -17,8 +17,12 @@ module.exports = new MessageEvent({
         const args = message.content.slice(prefix.length).trim().split(/ +/)
         const commandName = args.shift()!.toLowerCase()
 
-        const command = client.msgCommands.get(commandName)
-            || client.commands.find((cmd: MessageCommand) => cmd.aliases && cmd.aliases.includes(commandName))
+        const command =
+            client.msgCommands.get(commandName) ||
+            client.commands.find(
+                (cmd: MessageCommand) =>
+                    cmd.aliases && cmd.aliases.includes(commandName)
+            )
 
         // dynamic command handling
         if (!command) return
@@ -28,5 +32,5 @@ module.exports = new MessageEvent({
         } catch (error) {
             console.error(error)
         }
-    }
+    },
 })
