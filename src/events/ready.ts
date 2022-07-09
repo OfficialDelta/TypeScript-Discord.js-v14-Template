@@ -5,6 +5,6 @@ export default new Event({
     once: true,
     execute() {
         // Runs when the bot logs in
-        console.log(`Logged in as ${client?.user?.tag}!`)
+        console.log(`Logged in as ${client.user?.tag as string}!`)
     },
 })

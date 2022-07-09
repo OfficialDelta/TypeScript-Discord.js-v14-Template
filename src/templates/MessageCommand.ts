@@ -5,7 +5,8 @@ import BaseCommand from './BaseCommand'
  * Represents a Message Command
  */
 export default class MessageCommand extends BaseCommand {
-    aliases?: string[]
+    aliases: string[]
+    execute: (message: Message, args: string[]) => Promise<void> | void
 
     /**
      * @param {{
@@ -22,6 +23,7 @@ export default class MessageCommand extends BaseCommand {
         execute: (message: Message, args: string[]) => Promise<void> | void
     }) {
         super(options)
-        this.aliases = options.aliases
+        this.execute = options.execute
+        this.aliases = options.aliases ?? []
     }
 }

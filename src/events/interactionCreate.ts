@@ -1,3 +1,4 @@
+import ApplicationCommand from '../templates/ApplicationCommand'
 import InteractionEvent from '../templates/InteractionEvent'
 
 export default new InteractionEvent({
@@ -9,9 +10,10 @@ export default new InteractionEvent({
         if (!client.commands.has(interaction.commandName)) return
 
         try {
-            await client.commands
-                .get(interaction.commandName)
-                .execute(interaction)
+            const command: ApplicationCommand = (await client.commands.get(
+                interaction.commandName
+            )) as ApplicationCommand
+            await command.execute(interaction)
         } catch (error) {
             console.error(error)
             await interaction.reply({

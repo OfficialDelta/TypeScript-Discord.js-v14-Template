@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-assignment */
 import { ApplicationCommandData, Guild } from 'discord.js'
 import { readdirSync } from 'fs'
 import ApplicationCommand from '../templates/ApplicationCommand'
-const { prefix } = require('../config.json')
+import { prefix } from '../config.json'
 import MessageCommand from '../templates/MessageCommand'
 
 type CommandData = PartialBy<ApplicationCommand, 'execute' | 'permissions'>
@@ -13,7 +14,7 @@ export default new MessageCommand({
         if (message.author.id !== client.application?.owner?.id) return
 
         if (args.length < 1) {
-            message.reply(
+            await message.reply(
                 `Incorrect number of arguments! The correct format is \`${prefix}deploy <guild/global>\``
             )
             return
@@ -22,12 +23,12 @@ export default new MessageCommand({
         if (args[0].toLowerCase() === 'global') {
             // global deployment
 
-            let commandData: ApplicationCommandData[] = []
-            let permissionsData: {
+            const commandData: ApplicationCommandData[] = []
+            const permissionsData: {
                 name: string
                 permissions: ApplicationCommand['permissions']
             }[] = []
-            let inGuild: boolean = message.guildId ? true : false
+            const inGuild: boolean = message.guildId ? true : false
 
             const files: string[] = readdirSync('./commands').filter((file) =>
                 file.endsWith('.js')
@@ -45,7 +46,7 @@ export default new MessageCommand({
                 })
 
                 // remove the execute function and permissions from the command data
-                let processedCommandInfo: CommandData = commandInfo
+                const processedCommandInfo: CommandData = commandInfo
 
                 delete processedCommandInfo.execute
                 delete processedCommandInfo.permissions
@@ -63,26 +64,26 @@ export default new MessageCommand({
                         (command) => command.name === permissionInfo.name
                     )
 
-                    command?.permissions.set({
+                    await command?.permissions.set({
                         permissions: permissionInfo.permissions,
                         guild: message.guild as Guild,
                     })
                 }
             }
 
-            message.reply('Deploying!')
+            await message.reply('Deploying!')
         } else if (args[0].toLowerCase() === 'guild') {
             // guild deployment
 
-            let commandData: ApplicationCommandData[] = []
-            let permissionsData: {
+            const commandData: ApplicationCommandData[] = []
+            const permissionsData: {
                 name: string
                 permissions: ApplicationCommand['permissions']
             }[] = []
-            let inGuild: boolean = message.guildId ? true : false
+            const inGuild: boolean = message.guildId ? true : false
 
             if (!inGuild) {
-                message.reply('Do this in a guild!')
+                await message.reply('Do this in a guild!')
                 return
             }
 
@@ -102,7 +103,7 @@ export default new MessageCommand({
                 })
 
                 // remove the execute function and permissions from the command data
-                let processedCommandInfo: CommandData = commandInfo
+                const processedCommandInfo: CommandData = commandInfo
 
                 delete processedCommandInfo.execute
                 delete processedCommandInfo.permissions
@@ -110,19 +111,24 @@ export default new MessageCommand({
                 commandData.push(processedCommandInfo as ApplicationCommandData)
             }
 
-            const commands = await message.guild!.commands.set(commandData)
+            const commands = await message.guild?.commands.set(commandData)
+
+            if (!commands) {
+                await message.reply('T')
+                return
+            }
 
             for (const permissionInfo of permissionsData) {
                 const command = commands.find(
                     (command) => command.name === permissionInfo.name
                 )
 
-                command?.permissions.set({
+                await command?.permissions.set({
                     permissions: permissionInfo.permissions,
                 })
             }
 
-            message.reply('Deploying!')
+            await message.reply('Deploying!')
         }
     },
 })

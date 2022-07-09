@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
-
+/* eslint-disable @typescript-eslint/no-var-requires */
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -11,17 +10,20 @@ import MessageCommand from './templates/MessageCommand'
 const token: string = process.env.TOKEN as string
 
 // Discord client object
-global.client = new Client({
-    intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MESSAGES,
-        Intents.FLAGS.DIRECT_MESSAGES,
-    ],
-    partials: ['CHANNEL'],
-})
-
-client.commands = new Collection()
-client.msgCommands = new Collection()
+global.client = Object.assign(
+    new Client({
+        intents: [
+            Intents.FLAGS.GUILDS,
+            Intents.FLAGS.GUILD_MESSAGES,
+            Intents.FLAGS.DIRECT_MESSAGES,
+        ],
+        partials: ['CHANNEL'],
+    }),
+    {
+        commands: new Collection<string, ApplicationCommand>(),
+        msgCommands: new Collection<string, MessageCommand>(),
+    }
+)
 
 // Set each command in the commands folder as a command in the client.commands collection
 const commandFiles: string[] = readdirSync('./commands').filter((file) =>

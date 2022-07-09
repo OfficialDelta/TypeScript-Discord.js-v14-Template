@@ -114,8 +114,8 @@ export default class Menu extends EventEmitter {
             idle: this.idle,
         })
 
-        this.collector.on('collect', (i): void => {
-            i.deferUpdate()
+        this.collector.on('collect', async (i) => {
+            await i.deferUpdate()
             const customId = (i.component as MessageButton).customId
             const action = this.currentPage.buttonActions.find(
                 (b) => b.customId === customId
@@ -145,36 +145,39 @@ export default class Menu extends EventEmitter {
             }
         })
 
-        this.collector.on('end', () => {
-            this.stop()
+        this.collector.on('end', async () => {
+            await this.stop()
         })
     }
 
     /**
      * Stops listening for button interactions and removes the buttons from the menu
      */
-    stop(): void {
+    async stop(): Promise<void> {
         if (!this.menu) throw new Error('Menu is not started')
         if (!this.collector) throw new Error('Collector is not started')
 
         this.collector.stop()
-        this.menu.edit({ embeds: [this.currentPage.content], components: [] })
+        await this.menu.edit({
+            embeds: [this.currentPage.content],
+            components: [],
+        })
     }
 
     /**
      * Deletes the menu
      */
-    delete(): void {
-        this.menu?.delete()
+    async delete(): Promise<void> {
+        await this.menu?.delete()
     }
 
     /**
      * Sets the current page to the page with the given index or name
      * @param {number | string} arg - The index/name of the page
      */
-    setPage(page: number): void
-    setPage(name: string): void
-    setPage(arg: number | string): void {
+    async setPage(page: number): Promise<void>
+    async setPage(name: string): Promise<void>
+    async setPage(arg: number | string): Promise<void> {
         if (!this.menu) throw new Error('Menu is not started')
 
         if (typeof arg === 'number') {
@@ -187,7 +190,7 @@ export default class Menu extends EventEmitter {
 
         this.emit('pageChange', this.currentPage)
 
-        this.menu.edit({
+        await this.menu.edit({
             embeds: [this.currentPage.content],
             components: this.currentPage.actionRows,
         })

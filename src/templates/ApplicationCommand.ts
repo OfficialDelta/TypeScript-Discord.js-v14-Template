@@ -47,6 +47,7 @@ export default class ApplicationCommand extends BaseCommand {
     options: ApplicationCommandOptions[]
     type: 'CHAT_INPUT' | 'USER' | 'MESSAGE'
     defaultPermission: boolean
+    execute: (interaction: CommandInteraction) => Promise<void> | void
 
     /**
      * @param {{
@@ -69,6 +70,7 @@ export default class ApplicationCommand extends BaseCommand {
         execute: (interaction: CommandInteraction) => Promise<void> | void
     }) {
         super(options)
+        this.execute = options.execute
         this.permissions = options.permissions ?? []
         this.options = options.options ?? []
         this.type = options.type ?? 'CHAT_INPUT'
