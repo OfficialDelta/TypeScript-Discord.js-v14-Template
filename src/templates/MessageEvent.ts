@@ -1,4 +1,4 @@
-import { Message } from 'discord.js'
+import type { Message } from 'discord.js'
 import Event from '../templates/Event'
 
 export default class MessageEvent extends Event {

@@ -1,4 +1,7 @@
-import { ApplicationCommandPermissions, CommandInteraction } from 'discord.js'
+import type {
+    ApplicationCommandPermissions,
+    CommandInteraction,
+} from 'discord.js'
 import BaseCommand from './BaseCommand'
 
 type ApplicationCommandOptions = {
@@ -47,7 +50,7 @@ export default class ApplicationCommand extends BaseCommand {
     options: ApplicationCommandOptions[]
     type: 'CHAT_INPUT' | 'USER' | 'MESSAGE'
     defaultPermission: boolean
-    execute: (interaction: CommandInteraction) => Promise<void> | void
+    override execute: (interaction: CommandInteraction) => Promise<void> | void
 
     /**
      * @param {{

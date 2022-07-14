@@ -1,31 +1,6 @@
 {
+    "extends": "@tsconfig/node18-strictest-esm/tsconfig.json",
     "compilerOptions": {
-        "target": "es2020",
-        "module": "esnext",
-        "allowJs": false,
-        "outDir": "./dist",
-        "importHelpers": true,
-
-        "strict": true,
-        "noImplicitAny": true,
-        "strictNullChecks": true,
-        "strictFunctionTypes": true,
-        "alwaysStrict": true,
-
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "noImplicitReturns": true,
-        "noFallthroughCasesInSwitch": true,
-
-        "moduleResolution": "node",
-        "allowSyntheticDefaultImports": true,
-
-        "pretty": true,
-
-        "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true,
-
-        "resolveJsonModule": true,
-        "esModuleInterop": true
+        "resolveJsonModule": true
     }
 }

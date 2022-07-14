@@ -1,4 +1,4 @@
-import MessageCommand from '../templates/MessageCommand'
+import type MessageCommand from '../templates/MessageCommand'
 import MessageEvent from '../templates/MessageEvent'
 import { prefix } from '../config.json'
 
@@ -17,7 +17,7 @@ export default new MessageEvent({
         const args = message.content.slice(prefix.length).trim().split(/ +/)
         const commandName = (<string>args.shift()).toLowerCase()
 
-        const command: MessageCommand | undefined =
+        const command =
             (client.msgCommands.get(commandName) as MessageCommand) ||
             (client.msgCommands.find(
                 (cmd: MessageCommand): boolean =>

@@ -2,7 +2,7 @@
  * Base class for all commands
  * @abstract
  */
-export default class BaseCommand {
+export default abstract class BaseCommand {
     name: string
     description: string
     execute: (...args: any) => Promise<void> | void

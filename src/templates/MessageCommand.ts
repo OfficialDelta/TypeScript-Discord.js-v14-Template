@@ -1,4 +1,4 @@
-import { Message } from 'discord.js'
+import type { Message } from 'discord.js'
 import BaseCommand from './BaseCommand'
 
 /*
@@ -6,7 +6,7 @@ import BaseCommand from './BaseCommand'
  */
 export default class MessageCommand extends BaseCommand {
     aliases: string[]
-    execute: (message: Message, args: string[]) => Promise<void> | void
+    override execute: (message: Message, args: string[]) => Promise<void> | void
 
     /**
      * @param {{

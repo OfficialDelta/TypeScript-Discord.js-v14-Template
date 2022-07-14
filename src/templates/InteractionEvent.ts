@@ -1,4 +1,4 @@
-import { Interaction } from 'discord.js'
+import type { Interaction } from 'discord.js'
 import Event from '../templates/Event'
 
 export default class InteractionEvent extends Event {

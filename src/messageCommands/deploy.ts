@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-assignment */
-import { ApplicationCommandData, Guild } from 'discord.js'
+import type { ApplicationCommandData, Guild } from 'discord.js'
 import { readdirSync } from 'fs'
-import ApplicationCommand from '../templates/ApplicationCommand'
+import type ApplicationCommand from '../templates/ApplicationCommand'
 import { prefix } from '../config.json'
 import MessageCommand from '../templates/MessageCommand'
 
@@ -13,7 +13,7 @@ export default new MessageCommand({
     async execute(message, args): Promise<void> {
         if (message.author.id !== client.application?.owner?.id) return
 
-        if (args.length < 1) {
+        if (!args[0]) {
             await message.reply(
                 `Incorrect number of arguments! The correct format is \`${prefix}deploy <guild/global>\``
             )

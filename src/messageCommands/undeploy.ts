@@ -7,7 +7,7 @@ export default new MessageCommand({
     async execute(message, args): Promise<void> {
         if (message.author.id !== client.application?.owner?.id) return
 
-        if (args.length < 1) {
+        if (!args[0]) {
             await message.reply(
                 `Incorrect number of arguments! The correct format is \`${prefix}undeploy <guild/global>\``
             )

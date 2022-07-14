@@ -1,13 +1,12 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import dotenv from 'dotenv'
 dotenv.config()
 
 import { Client, Intents, Collection } from 'discord.js'
 import { readdirSync } from 'fs'
-import ApplicationCommand from './templates/ApplicationCommand'
-import Event from './templates/Event'
-import MessageCommand from './templates/MessageCommand'
-const token: string = process.env.TOKEN as string
+import type ApplicationCommand from './templates/ApplicationCommand'
+import type Event from './templates/Event'
+import type MessageCommand from './templates/MessageCommand'
+const token: string = process.env['TOKEN'] as string
 
 // Discord client object
 global.client = Object.assign(
@@ -30,8 +29,9 @@ const commandFiles: string[] = readdirSync('./commands').filter((file) =>
     file.endsWith('.ts')
 )
 for (const file of commandFiles) {
-    const command: ApplicationCommand =
-        require(`./commands/${file}`) as ApplicationCommand
+    const command: ApplicationCommand = (await import(
+        `./commands/${file}`
+    )) as ApplicationCommand
     client.commands.set(command.name, command)
 }
 
@@ -39,8 +39,9 @@ const msgCommandFiles: string[] = readdirSync('./messageCommands').filter(
     (file) => file.endsWith('.ts')
 )
 for (const file of msgCommandFiles) {
-    const command: MessageCommand =
-        require(`./messageCommands/${file}`) as MessageCommand
+    const command: MessageCommand = (await import(
+        `./messageCommands/${file}`
+    )) as MessageCommand
     client.msgCommands.set(command.name, command)
 }
 
@@ -50,7 +51,7 @@ const eventFiles: string[] = readdirSync('./events').filter((file) =>
 )
 
 for (const file of eventFiles) {
-    const event: Event = require(`./events/${file}`) as Event
+    const event: Event = (await import(`./events/${file}`)) as Event
     if (event.once) {
         client.once(event.name, (...args) => event.execute(...args))
     } else {

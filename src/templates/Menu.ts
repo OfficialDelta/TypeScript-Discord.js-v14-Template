@@ -12,7 +12,7 @@ import EventEmitter from 'events'
 
 type ButtonAction = {
     customId: string
-    action: string | (() => void)
+    action: (() => void) | string
 }
 
 type MenuPage = {
@@ -36,6 +36,28 @@ export default class Menu extends EventEmitter {
     pageIndex: number
     menu?: Message
     collector?: InteractionCollector<MessageComponentInteraction>
+
+    private errorPage: MenuPage = {
+        name: 'error',
+        content: new MessageEmbed({
+            description: 'Error: page index not found',
+        }),
+        actionRows: [
+            new MessageActionRow().addComponents([
+                new MessageButton({
+                    label: 'Stop Menu Session',
+                    customId: 'stop',
+                    style: 'DANGER',
+                }),
+            ]),
+        ],
+        buttonActions: [
+            {
+                customId: 'stop',
+                action: 'stop',
+            },
+        ],
+    }
 
     /**
      * @param {TextChannel} channel - The channel the menu will be sent in
@@ -70,6 +92,7 @@ export default class Menu extends EventEmitter {
         if (!this.pageArray) throw new Error('Page array is required')
         if (!this.timeout) throw new Error('Timeout is required')
         if (!this.idle) throw new Error('Idle time is required')
+        if (!this.pageArray[0]) throw new Error('Page array is empty')
 
         this.currentPage = this.pageArray[0]
         this.pageIndex = 0
@@ -182,10 +205,10 @@ export default class Menu extends EventEmitter {
 
         if (typeof arg === 'number') {
             this.pageIndex = arg
-            this.currentPage = this.pageArray[arg]
+            this.currentPage = this.pageArray[arg] ?? this.errorPage
         } else {
             this.pageIndex = this.pageArray.findIndex((p) => p.name === arg)
-            this.currentPage = this.pageArray[this.pageIndex]
+            this.currentPage = this.pageArray[this.pageIndex] ?? this.errorPage
         }
 
         this.emit('pageChange', this.currentPage)

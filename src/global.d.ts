@@ -1,5 +1,4 @@
-/*eslint no-var: "off"*/
-
+/* eslint-disable no-var */
 import { Client, Collection } from 'discord.js'
 import ApplicationCommand from '../templates/ApplicationCommand'
 import MessageCommand from '../templates/MessageCommand'
