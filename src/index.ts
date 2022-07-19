@@ -1,7 +1,7 @@
 import dotenv from 'dotenv'
 dotenv.config()
 
-import { Client, Intents, Collection } from 'discord.js'
+import { Client, GatewayIntentBits, Collection, Partials } from 'discord.js'
 import { readdirSync } from 'fs'
 import type ApplicationCommand from './templates/ApplicationCommand'
 import type Event from './templates/Event'
@@ -12,11 +12,11 @@ const token: string = process.env['TOKEN'] as string
 global.client = Object.assign(
     new Client({
         intents: [
-            Intents.FLAGS.GUILDS,
-            Intents.FLAGS.GUILD_MESSAGES,
-            Intents.FLAGS.DIRECT_MESSAGES,
+            GatewayIntentBits.Guilds,
+            GatewayIntentBits.GuildMessages,
+            GatewayIntentBits.DirectMessages,
         ],
-        partials: ['CHANNEL'],
+        partials: [Partials.Channel],
     }),
     {
         commands: new Collection<string, ApplicationCommand>(),
