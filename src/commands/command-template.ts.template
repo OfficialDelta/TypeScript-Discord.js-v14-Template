@@ -1,4 +1,9 @@
 import ApplicationCommand from '../templates/ApplicationCommand'
+import {
+    ApplicationCommandOptionType,
+    ApplicationCommandPermissionType,
+    ApplicationCommandType,
+} from 'discord.js'
 
 export default new ApplicationCommand({
     name: 'command-name',
@@ -7,30 +12,30 @@ export default new ApplicationCommand({
         // example permissions
         {
             id: '123456789012345678',
-            type: 'USER',
+            type: ApplicationCommandPermissionType.User,
             permission: false,
         },
         {
             id: '464464090157416448',
-            type: 'ROLE',
+            type: ApplicationCommandPermissionType.Role,
             permission: true,
-        }
+        },
     ],
     options: [
         // 'arguments' for the slash command
         // example option
         {
             name: 'option-name',
-            type: 'OPTION-TYPE',
+            type: ApplicationCommandOptionType.Channel,
             description: 'option-description',
             required: false,
-        }
+        },
     ],
     defaultPermission: true, // whether or not the command is enabled by default for @everyone
-    type: 'CHAT_INPUT', // the type of command
+    type: ApplicationCommandType.ChatInput, // the type of command
     async execute(interaction) {
         // code to run when the command is executed
         // example code
         await interaction.reply('Pong!')
-    }
+    },
 })
