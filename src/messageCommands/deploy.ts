@@ -67,6 +67,7 @@ export default new MessageCommand({
                     await command?.permissions.set({
                         permissions: permissionInfo.permissions,
                         guild: message.guild as Guild,
+                        token: process.env['TOKEN'] as string,
                     })
                 }
             }
@@ -125,6 +126,7 @@ export default new MessageCommand({
 
                 await command?.permissions.set({
                     permissions: permissionInfo.permissions,
+                    token: process.env['TOKEN'] as string,
                 })
             }
 

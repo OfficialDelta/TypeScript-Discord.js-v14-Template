@@ -1,5 +1,9 @@
 import type {
+    ApplicationCommandOptionAllowedChannelTypes,
+    ApplicationCommandOptionType,
     ApplicationCommandPermissions,
+    ApplicationCommandPermissionType,
+    ApplicationCommandType,
     CommandInteraction,
 } from 'discord.js'
 import BaseCommand from './BaseCommand'
@@ -7,35 +11,13 @@ import BaseCommand from './BaseCommand'
 type ApplicationCommandOptions = {
     name: string
     description: string
-    type:
-        | 'SUB_COMMAND'
-        | 'SUB_COMMAND_GROUP'
-        | 'STRING'
-        | 'INTEGER'
-        | 'NUMBER'
-        | 'boolean'
-        | 'USER'
-        | 'CHANNEL'
-        | 'ROLE'
-        | 'MENTIONABLE'
+    type: ApplicationCommandOptionType
     choices?: {
         name: string
         value: string | number
     }[]
     options?: ApplicationCommandOptions[]
-    channel_types?: (
-        | 'GUILD_TEXT'
-        | 'DM'
-        | 'GUILD_VOICE'
-        | 'GROUP_DM'
-        | 'GUILD_CATEGORY'
-        | 'GUILD_NEWS'
-        | 'GUILD_STORE'
-        | 'GUILD_NEWS_THREAD'
-        | 'GUILD_PUBLIC_THREAD'
-        | 'GUILD_PRIVATE_THREAD'
-        | 'GUILD_STAGE_VOICE'
-    )[]
+    channel_types?: ApplicationCommandOptionAllowedChannelTypes[]
     min_value?: number
     max_value?: number
     autocomplete?: boolean
@@ -43,12 +25,12 @@ type ApplicationCommandOptions = {
 }
 
 /**
- * Represents a Slash Command
+ * Represents an Application Command
  */
 export default class ApplicationCommand extends BaseCommand {
     permissions: ApplicationCommandPermissions[]
     options: ApplicationCommandOptions[]
-    type: 'CHAT_INPUT' | 'USER' | 'MESSAGE'
+    type: ApplicationCommandType
     defaultPermission: boolean
     override execute: (interaction: CommandInteraction) => Promise<void> | void
 
@@ -59,7 +41,7 @@ export default class ApplicationCommand extends BaseCommand {
      *      permissions?: ApplicationCommandPermissions[],
      *      options?: ApplicationCommandOptions[],
      *      defaultPermission?: boolean,
-     *      type: 'CHAT_INPUT'|'USER'|'MESSAGE',
+     *      type: ApplicationCommandType
      *      execute: (interaction: CommandInteraction) => Promise<void> | void
      *  }} options - The options for the slash command
      */
@@ -69,7 +51,7 @@ export default class ApplicationCommand extends BaseCommand {
         permissions?: ApplicationCommandPermissions[]
         options?: ApplicationCommandOptions[]
         defaultPermission?: boolean
-        type: 'CHAT_INPUT' | 'USER' | 'MESSAGE'
+        type: ApplicationCommandType
         execute: (interaction: CommandInteraction) => Promise<void> | void
     }) {
         super(options)
@@ -83,14 +65,14 @@ export default class ApplicationCommand extends BaseCommand {
     /**
      * @param {{
      *      id: string,
-     *      type: ('USER'|'ROLE'),
+     *      type: ApplicationCommandPermissionType,
      *      permission: boolean
      *  }[]} permissions - The permissions
      */
     setPermissions(
         permissions: {
             id: string
-            type: 'USER' | 'ROLE'
+            type: ApplicationCommandPermissionType
             permission: boolean
         }[]
     ): void {

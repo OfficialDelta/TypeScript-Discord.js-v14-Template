@@ -1,10 +1,11 @@
 import type MessageCommand from '../templates/MessageCommand'
-import MessageEvent from '../templates/MessageEvent'
 import { prefix } from '../config.json'
+import Event from '../templates/Event'
+import { Events, Message } from 'discord.js'
 
-export default new MessageEvent({
-    name: 'messageCreate',
-    async execute(message) {
+export default new Event({
+    name: Events.MessageCreate,
+    async execute(message: Message): Promise<void> {
         // Handles non-slash commands, only recommended for deploy commands
 
         // filters out bots and non-prefixed messages
