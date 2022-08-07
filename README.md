@@ -11,3 +11,11 @@ A quick-start template for Discord.js v14 in Typescript that contains handling f
 ## Building
 
 Use the scripts provided in the `package.json` file
+
+## ts-node Support
+
+To use this with ts-node:
+
+```bash
+ts-node-esm --files src/index.ts
+```

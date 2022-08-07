@@ -26,8 +26,8 @@ global.client = Object.assign(
 )
 
 // Set each command in the commands folder as a command in the client.commands collection
-const commandFiles: string[] = readdirSync('./commands').filter((file) =>
-    file.endsWith('.js')
+const commandFiles: string[] = readdirSync('./commands').filter(
+    (file) => file.endsWith('.js') || file.endsWith('.ts')
 )
 for (const file of commandFiles) {
     const command: ApplicationCommand = (await import(`./commands/${file}`))
@@ -36,7 +36,7 @@ for (const file of commandFiles) {
 }
 
 const msgCommandFiles: string[] = readdirSync('./messageCommands').filter(
-    (file) => file.endsWith('.js')
+    (file) => file.endsWith('.js') || file.endsWith('.ts')
 )
 for (const file of msgCommandFiles) {
     const command: MessageCommand = (await import(`./messageCommands/${file}`))
@@ -45,8 +45,8 @@ for (const file of msgCommandFiles) {
 }
 
 // Event handling
-const eventFiles: string[] = readdirSync('./events').filter((file) =>
-    file.endsWith('.js')
+const eventFiles: string[] = readdirSync('./events').filter(
+    (file) => file.endsWith('.js') || file.endsWith('.ts')
 )
 
 for (const file of eventFiles) {
