@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import dotenv from 'dotenv'
-dotenv.config()
+import 'dotenv/config'
 
 import { Client, GatewayIntentBits, Collection, Partials } from 'discord.js'
 import { readdirSync } from 'fs'
-import type ApplicationCommand from './templates/ApplicationCommand'
-import type Event from './templates/Event'
-import type MessageCommand from './templates/MessageCommand'
-const token: string = process.env['TOKEN'] as string
+import type ApplicationCommand from './templates/ApplicationCommand.js'
+import type Event from './templates/Event.js'
+import type MessageCommand from './templates/MessageCommand.js'
+import deployGlobalCommands from './deployGlobalCommands.js'
+const { TOKEN } = process.env
+
+await deployGlobalCommands()
 
 // Discord client object
 global.client = Object.assign(
@@ -32,7 +34,7 @@ const commandFiles: string[] = readdirSync('./commands').filter(
 for (const file of commandFiles) {
     const command: ApplicationCommand = (await import(`./commands/${file}`))
         .default as ApplicationCommand
-    client.commands.set(command.name, command)
+    client.commands.set(command.data.name, command)
 }
 
 const msgCommandFiles: string[] = readdirSync('./messageCommands').filter(
@@ -58,4 +60,4 @@ for (const file of eventFiles) {
     }
 }
 
-await client.login(token)
+await client.login(TOKEN)

@@ -1,14 +1,17 @@
-/* eslint-disable @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-assignment */
-import type { ApplicationCommandData, Guild } from 'discord.js'
+/* eslint-disable @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access */
 import { readdirSync } from 'fs'
 import type ApplicationCommand from '../templates/ApplicationCommand.js'
 import MessageCommand from '../templates/MessageCommand.js'
+import { REST } from '@discordjs/rest'
+import { RESTPostAPIApplicationCommandsJSONBody, Routes } from 'discord.js'
+const { TOKEN, CLIENT_ID } = process.env as {
+    TOKEN: string
+    CLIENT_ID: string
+}
 
 const { prefix } = await import('../config.json', {
     assert: { type: 'json' },
 })
-
-type CommandData = PartialBy<ApplicationCommand, 'execute' | 'permissions'>
 
 export default new MessageCommand({
     name: 'deploy',
@@ -26,111 +29,68 @@ export default new MessageCommand({
         if (args[0].toLowerCase() === 'global') {
             // global deployment
 
-            const commandData: ApplicationCommandData[] = []
-            const permissionsData: {
-                name: string
-                permissions: ApplicationCommand['permissions']
-            }[] = []
-            const inGuild: boolean = message.guildId ? true : false
-
-            const files: string[] = readdirSync('./commands').filter((file) =>
-                file.endsWith('.js')
+            const commands: RESTPostAPIApplicationCommandsJSONBody[] = []
+            const commandFiles: string[] = readdirSync('./commands').filter(
+                (file) => file.endsWith('.js') || file.endsWith('.ts')
             )
 
-            // loop through each file and filter for the command and permissions data
-            for (const file of files) {
-                delete require.cache[require.resolve(`../commands/${file}`)]
-
-                const commandInfo: ApplicationCommand = require(`../commands/${file}`)
-
-                permissionsData.push({
-                    name: commandInfo.name,
-                    permissions: commandInfo.permissions ?? [],
-                })
-
-                // remove the execute function and permissions from the command data
-                const processedCommandInfo: CommandData = commandInfo
-
-                delete processedCommandInfo.execute
-                delete processedCommandInfo.permissions
-
-                commandData.push(processedCommandInfo as ApplicationCommandData)
+            for (const file of commandFiles) {
+                const command: ApplicationCommand = (
+                    await import(`./commands/${file}`)
+                ).default as ApplicationCommand
+                const commandData = command.data.toJSON()
+                commands.push(commandData)
             }
 
-            // deploy the commands
-            const commands = await client.application?.commands.set(commandData)
+            const rest = new REST({ version: '10' }).setToken(TOKEN)
 
-            if (inGuild) {
-                // set the permissions for each command for that guild (permissions will only work in said guild, if you need global permissions then you'll have to manually do it)
-                for (const permissionInfo of permissionsData) {
-                    const command = commands.find(
-                        (command) => command.name === permissionInfo.name
-                    )
+            try {
+                console.log('Started refreshing application (/) commands.')
 
-                    await command?.permissions.set({
-                        permissions: permissionInfo.permissions,
-                        guild: message.guild as Guild,
-                        token: process.env['TOKEN'] as string,
-                    })
-                }
+                await rest.put(Routes.applicationCommands(CLIENT_ID), {
+                    body: commands,
+                })
+
+                console.log('Successfully reloaded application (/) commands.')
+            } catch (error) {
+                console.error(error)
             }
 
             await message.reply('Deploying!')
         } else if (args[0].toLowerCase() === 'guild') {
             // guild deployment
 
-            const commandData: ApplicationCommandData[] = []
-            const permissionsData: {
-                name: string
-                permissions: ApplicationCommand['permissions']
-            }[] = []
-            const inGuild: boolean = message.guildId ? true : false
-
-            if (!inGuild) {
-                await message.reply('Do this in a guild!')
-                return
-            }
-
-            const files: string[] = readdirSync('./commands').filter((file) =>
-                file.endsWith('.js')
+            const commands: RESTPostAPIApplicationCommandsJSONBody[] = []
+            const commandFiles: string[] = readdirSync('./commands').filter(
+                (file) => file.endsWith('.js') || file.endsWith('.ts')
             )
 
-            // loop through each file and filter for the command and permissions data
-            for (const file of files) {
-                delete require.cache[require.resolve(`../commands/${file}`)]
-
-                const commandInfo: ApplicationCommand = require(`../commands/${file}`)
-
-                permissionsData.push({
-                    name: commandInfo.name,
-                    permissions: commandInfo.permissions ?? [],
-                })
-
-                // remove the execute function and permissions from the command data
-                const processedCommandInfo: CommandData = commandInfo
-
-                delete processedCommandInfo.execute
-                delete processedCommandInfo.permissions
-
-                commandData.push(processedCommandInfo as ApplicationCommandData)
+            for (const file of commandFiles) {
+                const command: ApplicationCommand = (
+                    await import(`./commands/${file}`)
+                ).default as ApplicationCommand
+                const commandData = command.data.toJSON()
+                commands.push(commandData)
             }
 
-            const commands = await message.guild?.commands.set(commandData)
+            const rest = new REST({ version: '10' }).setToken(TOKEN)
 
-            if (!commands) {
-                await message.reply('T')
-                return
-            }
+            try {
+                console.log('Started refreshing application (/) commands.')
 
-            for (const permissionInfo of permissionsData) {
-                const command = commands.find(
-                    (command) => command.name === permissionInfo.name
+                await rest.put(
+                    Routes.applicationGuildCommands(
+                        CLIENT_ID,
+                        message.guild?.id as string
+                    ),
+                    {
+                        body: commands,
+                    }
                 )
 
-                await command?.permissions.set({
-                    permissions: permissionInfo.permissions,
-                    token: process.env['TOKEN'] as string,
-                })
+                console.log('Successfully reloaded application (/) commands.')
+            } catch (error) {
+                console.error(error)
             }
 
             await message.reply('Deploying!')

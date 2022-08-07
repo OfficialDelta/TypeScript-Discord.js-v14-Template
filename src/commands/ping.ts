@@ -1,10 +1,10 @@
-import { ApplicationCommandType } from 'discord.js'
+import { SlashCommandBuilder } from 'discord.js'
 import ApplicationCommand from '../templates/ApplicationCommand.js'
 
 export default new ApplicationCommand({
-    name: 'ping',
-    description: 'Replies with Pong!',
-    type: ApplicationCommandType.ChatInput,
+    data: new SlashCommandBuilder()
+        .setName('ping')
+        .setDescription('Replies pong!'),
     async execute(interaction): Promise<void> {
         await interaction.reply('Pong!')
     },

@@ -9,6 +9,8 @@ const { prefix } = await import('../config.json', {
 export default new Event({
     name: Events.MessageCreate,
     async execute(message: Message): Promise<void> {
+        // ! Message content is a priviliged intent now!
+
         // Handles non-slash commands, only recommended for deploy commands
 
         // filters out bots and non-prefixed messages
