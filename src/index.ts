@@ -25,10 +25,11 @@ global.client = Object.assign(
 )
 
 // Set each command in the commands folder as a command in the client.commands collection
-const commandFiles: string[] = readdirSync('./commands').filter((file) =>
-    file.endsWith('.ts')
+const commandFiles: string[] = readdirSync('./commands').filter(
+    (file) => file.endsWith('.ts') || file.endsWith('.js')
 )
 for (const file of commandFiles) {
+    process.chdir('./commands')
     const command: ApplicationCommand = (await import(
         `./commands/${file}`
     )) as ApplicationCommand
@@ -36,9 +37,10 @@ for (const file of commandFiles) {
 }
 
 const msgCommandFiles: string[] = readdirSync('./messageCommands').filter(
-    (file) => file.endsWith('.ts')
+    (file) => file.endsWith('.ts') || file.endsWith('.js')
 )
 for (const file of msgCommandFiles) {
+    process.chdir('../messageCommands')
     const command: MessageCommand = (await import(
         `./messageCommands/${file}`
     )) as MessageCommand
@@ -46,11 +48,12 @@ for (const file of msgCommandFiles) {
 }
 
 // Event handling
-const eventFiles: string[] = readdirSync('./events').filter((file) =>
-    file.endsWith('.ts')
+const eventFiles: string[] = readdirSync('./events').filter(
+    (file) => file.endsWith('.ts') || file.endsWith('.js')
 )
 
 for (const file of eventFiles) {
+    process.chdir('../events')
     const event: Event = (await import(`./events/${file}`)) as Event
     if (event.once) {
         client.once(event.name, (...args) => event.execute(...args))
@@ -58,5 +61,7 @@ for (const file of eventFiles) {
         client.on(event.name, (...args) => event.execute(...args))
     }
 }
+
+process.chdir('../')
 
 await client.login(token)
