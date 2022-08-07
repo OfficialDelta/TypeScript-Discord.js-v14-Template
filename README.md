@@ -17,5 +17,6 @@ Use the scripts provided in the `package.json` file
 To use this with ts-node:
 
 ```bash
-ts-node-esm --files src/index.ts
+cd src
+ts-node-esm --files index.ts
 ```
