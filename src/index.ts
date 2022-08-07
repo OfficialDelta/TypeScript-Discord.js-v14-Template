@@ -36,16 +36,20 @@ for (const file of commandFiles) {
     client.commands.set(command.name, command)
 }
 
+process.chdir('../')
+
 const msgCommandFiles: string[] = readdirSync('./messageCommands').filter(
     (file) => file.endsWith('.ts') || file.endsWith('.js')
 )
 for (const file of msgCommandFiles) {
-    process.chdir('../messageCommands')
+    process.chdir('./messageCommands')
     const command: MessageCommand = (await import(
         `./messageCommands/${file}`
     )) as MessageCommand
     client.msgCommands.set(command.name, command)
 }
+
+process.chdir('../')
 
 // Event handling
 const eventFiles: string[] = readdirSync('./events').filter(
@@ -53,7 +57,7 @@ const eventFiles: string[] = readdirSync('./events').filter(
 )
 
 for (const file of eventFiles) {
-    process.chdir('../events')
+    process.chdir('./events')
     const event: Event = (await import(`./events/${file}`)) as Event
     if (event.once) {
         client.once(event.name, (...args) => event.execute(...args))
