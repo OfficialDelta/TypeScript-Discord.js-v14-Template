@@ -1,6 +1,7 @@
 {
     "extends": "@tsconfig/node18-strictest-esm/tsconfig.json",
     "compilerOptions": {
-        "resolveJsonModule": true
+        "resolveJsonModule": true,
+        "outDir": "./dist"
     }
 }
