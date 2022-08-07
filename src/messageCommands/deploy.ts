@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires, @typescript-eslint/no-unsafe-assignment */
 import type { ApplicationCommandData, Guild } from 'discord.js'
 import { readdirSync } from 'fs'
-import type ApplicationCommand from '../templates/ApplicationCommand'
-import { prefix } from '../config.json'
-import MessageCommand from '../templates/MessageCommand'
+import type ApplicationCommand from '../templates/ApplicationCommand.js'
+import MessageCommand from '../templates/MessageCommand.js'
+
+const { prefix } = await import('../config.json', {
+    assert: { type: 'json' },
+})
 
 type CommandData = PartialBy<ApplicationCommand, 'execute' | 'permissions'>
 

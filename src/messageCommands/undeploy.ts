@@ -1,5 +1,8 @@
-import { prefix } from '../config.json'
-import MessageCommand from '../templates/MessageCommand'
+import MessageCommand from '../templates/MessageCommand.js'
+
+const { prefix } = await import('../config.json', {
+    assert: { type: 'json' },
+})
 
 export default new MessageCommand({
     name: 'undeploy',

@@ -1,4 +1,5 @@
 {
+    "type": "module",
     "lint-staged": {
         "*.ts": "eslint --cache --fix",
         "*.{ts,css,md}": "prettier --write"
@@ -6,7 +7,10 @@
     "scripts": {
         "prepare": "husky install",
         "lint": "eslint --cache --fix src",
-        "prettier": "prettier --write src"
+        "prettier": "prettier --write src",
+        "compile": "tsc",
+        "copy": "cp src/.env dist",
+        "build": "npm run compile && npm run copy"
     },
     "dependencies": {
         "discord.js": "^14.0.2",

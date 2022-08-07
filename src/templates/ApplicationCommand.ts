@@ -6,7 +6,7 @@ import type {
     ApplicationCommandType,
     CommandInteraction,
 } from 'discord.js'
-import BaseCommand from './BaseCommand'
+import BaseCommand from './BaseCommand.js'
 
 type ApplicationCommandOptions = {
     name: string

@@ -1,5 +1,5 @@
 import { Events } from 'discord.js'
-import Event from '../templates/Event'
+import Event from '../templates/Event.js'
 
 export default new Event({
     name: Events.ClientReady,

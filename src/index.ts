@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import dotenv from 'dotenv'
 dotenv.config()
 
@@ -25,47 +26,36 @@ global.client = Object.assign(
 )
 
 // Set each command in the commands folder as a command in the client.commands collection
-const commandFiles: string[] = readdirSync('./commands').filter(
-    (file) => file.endsWith('.ts') || file.endsWith('.js')
+const commandFiles: string[] = readdirSync('./commands').filter((file) =>
+    file.endsWith('.js')
 )
 for (const file of commandFiles) {
-    process.chdir('./commands')
-    const command: ApplicationCommand = (await import(
-        `./commands/${file}`
-    )) as ApplicationCommand
+    const command: ApplicationCommand = (await import(`./commands/${file}`))
+        .default as ApplicationCommand
     client.commands.set(command.name, command)
 }
 
-process.chdir('../')
-
 const msgCommandFiles: string[] = readdirSync('./messageCommands').filter(
-    (file) => file.endsWith('.ts') || file.endsWith('.js')
+    (file) => file.endsWith('.js')
 )
 for (const file of msgCommandFiles) {
-    process.chdir('./messageCommands')
-    const command: MessageCommand = (await import(
-        `./messageCommands/${file}`
-    )) as MessageCommand
+    const command: MessageCommand = (await import(`./messageCommands/${file}`))
+        .default as MessageCommand
     client.msgCommands.set(command.name, command)
 }
 
-process.chdir('../')
-
 // Event handling
-const eventFiles: string[] = readdirSync('./events').filter(
-    (file) => file.endsWith('.ts') || file.endsWith('.js')
+const eventFiles: string[] = readdirSync('./events').filter((file) =>
+    file.endsWith('.js')
 )
 
 for (const file of eventFiles) {
-    process.chdir('./events')
-    const event: Event = (await import(`./events/${file}`)) as Event
+    const event: Event = (await import(`./events/${file}`)).default as Event
     if (event.once) {
         client.once(event.name, (...args) => event.execute(...args))
     } else {
         client.on(event.name, (...args) => event.execute(...args))
     }
 }
-
-process.chdir('../')
 
 await client.login(token)

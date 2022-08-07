@@ -1,9 +1,9 @@
 import { CommandInteraction, Events } from 'discord.js'
-import type ApplicationCommand from '../templates/ApplicationCommand'
-import Event from '../templates/Event'
+import type ApplicationCommand from '../templates/ApplicationCommand.js'
+import Event from '../templates/Event.js'
 
 export default new Event({
-    name: Events.ClientReady,
+    name: Events.InteractionCreate,
     async execute(interaction: CommandInteraction): Promise<void> {
         // Dynamically handle slash commands
         if (!interaction.isChatInputCommand()) return

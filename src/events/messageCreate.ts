@@ -1,7 +1,10 @@
-import type MessageCommand from '../templates/MessageCommand'
-import { prefix } from '../config.json'
-import Event from '../templates/Event'
+import type MessageCommand from '../templates/MessageCommand.js'
+import Event from '../templates/Event.js'
 import { Events, Message } from 'discord.js'
+
+const { prefix } = await import('../config.json', {
+    assert: { type: 'json' },
+})
 
 export default new Event({
     name: Events.MessageCreate,

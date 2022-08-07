@@ -1,5 +1,5 @@
 import { ApplicationCommandType } from 'discord.js'
-import ApplicationCommand from '../templates/ApplicationCommand'
+import ApplicationCommand from '../templates/ApplicationCommand.js'
 
 export default new ApplicationCommand({
     name: 'ping',
