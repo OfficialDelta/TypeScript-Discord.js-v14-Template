@@ -1,41 +1,11 @@
-import ApplicationCommand from '../templates/ApplicationCommand'
-import {
-    ApplicationCommandOptionType,
-    ApplicationCommandPermissionType,
-    ApplicationCommandType,
-} from 'discord.js'
+import { SlashCommandBuilder } from 'discord.js'
+import ApplicationCommand from '../templates/ApplicationCommand.js'
 
 export default new ApplicationCommand({
-    name: 'command-name',
-    description: 'command-description',
-    permissions: [
-        // example permissions
-        {
-            id: '123456789012345678',
-            type: ApplicationCommandPermissionType.User,
-            permission: false,
-        },
-        {
-            id: '464464090157416448',
-            type: ApplicationCommandPermissionType.Role,
-            permission: true,
-        },
-    ],
-    options: [
-        // 'arguments' for the slash command
-        // example option
-        {
-            name: 'option-name',
-            type: ApplicationCommandOptionType.Channel,
-            description: 'option-description',
-            required: false,
-        },
-    ],
-    defaultPermission: true, // whether or not the command is enabled by default for @everyone
-    type: ApplicationCommandType.ChatInput, // the type of command
-    async execute(interaction) {
-        // code to run when the command is executed
-        // example code
+    data: new SlashCommandBuilder()
+        .setName('ping')
+        .setDescription('Replies pong!'),
+    async execute(interaction): Promise<void> {
         await interaction.reply('Pong!')
     },
 })

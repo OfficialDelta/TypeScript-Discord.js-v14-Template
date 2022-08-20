@@ -1,10 +1,10 @@
-import type { CommandInteraction } from 'discord.js'
+import type { ChatInputCommandInteraction } from 'discord.js'
 
 /**
  * Represents a SubCommand
  */
 export default class SubCommand {
-    execute: (interaction: CommandInteraction) => Promise<void> | void
+    execute: (interaction: ChatInputCommandInteraction) => Promise<void> | void
 
     /**
      *
@@ -13,17 +13,19 @@ export default class SubCommand {
      *  }} options - The options for the subcommand
      */
     constructor(options: {
-        execute: (interaction: CommandInteraction) => Promise<void> | void
+        execute: (
+            interaction: ChatInputCommandInteraction
+        ) => Promise<void> | void
     }) {
         this.execute = options.execute
     }
 
     /**
-     * @param {(interaction: CommandInteraction) => Promise<void> | void} executeFunction - The function
+     * @param {(interaction: ChatInputCommandInteraction) => Promise<void> | void} executeFunction - The function
      */
     setExecute(
         executeFunction: (
-            interaction: CommandInteraction
+            interaction: ChatInputCommandInteraction
         ) => Promise<void> | void
     ): void {
         this.execute = executeFunction
