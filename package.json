@@ -10,7 +10,7 @@
         "prettier": "prettier --write src",
         "compile": "tsc",
         "copy": "cp src/.env dist",
-        "build": "npm run compile && npm run copy"
+        "build": "npm run lint && npm run prettier && npm run compile && npm run copy"
     },
     "dependencies": {
         "@discordjs/rest": "^1.0.1",
