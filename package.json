@@ -20,7 +20,7 @@
     "devDependencies": {
         "@tsconfig/node18-strictest-esm": "^1.0.1",
         "@typescript-eslint/eslint-plugin": "^5.35.1",
-        "@typescript-eslint/parser": "^5.34.0",
+        "@typescript-eslint/parser": "^5.42.1",
         "eslint": "^8.23.0",
         "eslint-config-prettier": "^8.5.0",
         "husky": "^8.0.1",
