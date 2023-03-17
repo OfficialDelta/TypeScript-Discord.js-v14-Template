@@ -4,6 +4,7 @@ import type {
     ContextMenuCommandBuilder,
     SlashCommandBuilder,
     SlashCommandSubcommandsOnlyBuilder,
+    AutocompleteInteraction,
 } from 'discord.js'
 import type SubCommand from './SubCommand'
 
@@ -17,12 +18,16 @@ export default class ApplicationCommand {
         | SlashCommandSubcommandsOnlyBuilder
     hasSubCommands: boolean
     execute: (interaction: ChatInputCommandInteraction) => Promise<void> | void
+    autocomplete?: (
+        interaction: AutocompleteInteraction
+    ) => Promise<void> | void
 
     /**
      * @param {{
      *      data: SlashCommandBuilder | ContextMenuCommandBuilder | SlashCommandSubcommandsOnlyBuilder
      *      hasSubCommands?: boolean
      *      execute?: (interaction: ChatInputCommandInteraction) => Promise<void> | void
+            autocomplete?: (interaction: AutocompleteInteraction) => Promise<void> | void
      *  }} options - The options for the slash command
      */
     constructor(options: {
@@ -33,6 +38,9 @@ export default class ApplicationCommand {
         hasSubCommands?: boolean
         execute?: (
             interaction: ChatInputCommandInteraction
+        ) => Promise<void> | void
+        autocomplete?: (
+            interaction: AutocompleteInteraction
         ) => Promise<void> | void
     }) {
         if (options.hasSubCommands) {
@@ -67,11 +75,14 @@ export default class ApplicationCommand {
             }
         } else if (options.execute) {
             this.execute = options.execute
+        } else if (options.autocomplete) {
+            this.autocomplete = options.autocomplete
         } else {
             throw new Error('No execute function provided')
         }
 
         this.data = options.data
+        this.autocomplete = options.autocomplete
         this.hasSubCommands = options.hasSubCommands ?? false
     }
 }
