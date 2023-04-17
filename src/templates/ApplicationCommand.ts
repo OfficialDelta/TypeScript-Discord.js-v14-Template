@@ -73,6 +73,40 @@ export default class ApplicationCommand {
                     }
                 }
             }
+
+            this.autocomplete = async (
+                interaction: AutocompleteInteraction
+            ) => {
+                const subCommandGroup = interaction.options.getSubcommandGroup()
+                const subCommandName = interaction.options.getSubcommand()
+
+                if (subCommandGroup || subCommandName) {
+                    const subCommandFilePath = `../subCommands/${
+                        this.data.name
+                    }/${
+                        subCommandGroup ? `${subCommandGroup}/` : ''
+                    }${subCommandName}.js`
+
+                    try {
+                        const subCommandModule = await import(
+                            subCommandFilePath
+                        )
+                        const subCommand =
+                            subCommandModule.default as SubCommand
+
+                        if (subCommand.autocomplete) {
+                            await subCommand.autocomplete(interaction)
+                        }
+                    } catch (error) {
+                        console.error(error)
+                        await interaction.reply({
+                            content:
+                                'An error occured when attempting to autocomplete that command!',
+                            ephemeral: true,
+                        })
+                    }
+                }
+            }
         } else if (options.execute) {
             this.execute = options.execute
         } else if (options.autocomplete) {
@@ -82,7 +116,9 @@ export default class ApplicationCommand {
         }
 
         this.data = options.data
-        this.autocomplete = options.autocomplete
+        if (!options.hasSubCommands) {
+            this.autocomplete = options.autocomplete
+        }
         this.hasSubCommands = options.hasSubCommands ?? false
     }
 }
