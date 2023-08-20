@@ -97,7 +97,7 @@ export default class ApplicationCommand {
                         await interaction.respond([
                             {
                                 name: 'Failed to autocomplete',
-                                value: ''
+                                value: 'error'
                             }
                         ])
                     }
