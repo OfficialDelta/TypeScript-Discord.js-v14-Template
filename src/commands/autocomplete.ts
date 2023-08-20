@@ -9,12 +9,14 @@ export default new ApplicationCommand({
                 .setName('query')
                 .setDescription('Phrase to search for')
                 .setAutocomplete(true)
+                .setRequired(true)
         )
         .addStringOption((option) =>
             option
                 .setName('version')
                 .setDescription('Version to search in')
                 .setAutocomplete(true)
+                .setRequired(true)
         )
         .setDescription('Search a guide!'),
 
