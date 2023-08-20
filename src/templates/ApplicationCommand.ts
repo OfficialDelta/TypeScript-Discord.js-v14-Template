@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import type {
+    AutocompleteInteraction,
     ChatInputCommandInteraction,
     ContextMenuCommandBuilder,
     SlashCommandBuilder,
-    SlashCommandSubcommandsOnlyBuilder,
-    AutocompleteInteraction,
+    SlashCommandSubcommandsOnlyBuilder
 } from 'discord.js'
-import type SubCommand from './SubCommand'
+import type SubCommand from './SubCommand.js'
 
 /**
  * Represents an Application Command
@@ -17,7 +17,7 @@ export default class ApplicationCommand {
         | ContextMenuCommandBuilder
         | SlashCommandSubcommandsOnlyBuilder
     hasSubCommands: boolean
-    execute: (interaction: ChatInputCommandInteraction) => Promise<void> | void
+    execute?: (interaction: ChatInputCommandInteraction) => Promise<void> | void
     autocomplete?: (
         interaction: AutocompleteInteraction
     ) => Promise<void> | void
@@ -27,7 +27,7 @@ export default class ApplicationCommand {
      *      data: SlashCommandBuilder | ContextMenuCommandBuilder | SlashCommandSubcommandsOnlyBuilder
      *      hasSubCommands?: boolean
      *      execute?: (interaction: ChatInputCommandInteraction) => Promise<void> | void
-            autocomplete?: (interaction: AutocompleteInteraction) => Promise<void> | void
+     *      autocomplete?: (interaction: AutocompleteInteraction) => Promise<void> | void
      *  }} options - The options for the slash command
      */
     constructor(options: {
@@ -51,7 +51,7 @@ export default class ApplicationCommand {
                 if (!commandName) {
                     await interaction.reply({
                         content: "I couldn't understand that command!",
-                        ephemeral: true,
+                        ephemeral: true
                     })
                 } else {
                     try {
@@ -68,7 +68,7 @@ export default class ApplicationCommand {
                         await interaction.reply({
                             content:
                                 'An error occured when attempting to execute that command!',
-                            ephemeral: true,
+                            ephemeral: true
                         })
                     }
                 }
@@ -81,29 +81,25 @@ export default class ApplicationCommand {
                 const subCommandName = interaction.options.getSubcommand()
 
                 if (subCommandGroup || subCommandName) {
-                    const subCommandFilePath = `../subCommands/${
-                        this.data.name
-                    }/${
-                        subCommandGroup ? `${subCommandGroup}/` : ''
-                    }${subCommandName}.js`
-
                     try {
-                        const subCommandModule = await import(
-                            subCommandFilePath
-                        )
-                        const subCommand =
-                            subCommandModule.default as SubCommand
-
+                        const subCommand = (
+                            await import(
+                                `../subCommands/${this.data.name}/${
+                                    subCommandGroup ? `${subCommandGroup}/` : ''
+                                }${subCommandName}.js`
+                            )
+                        ).default as SubCommand
                         if (subCommand.autocomplete) {
                             await subCommand.autocomplete(interaction)
                         }
                     } catch (error) {
                         console.error(error)
-                        await interaction.reply({
-                            content:
-                                'An error occured when attempting to autocomplete that command!',
-                            ephemeral: true,
-                        })
+                        await interaction.respond([
+                            {
+                                name: 'Failed to autocomplete',
+                                value: 'error'
+                            }
+                        ])
                     }
                 }
             }
