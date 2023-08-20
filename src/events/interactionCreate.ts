@@ -5,22 +5,45 @@ import Event from '../templates/Event.js'
 export default new Event({
     name: Events.InteractionCreate,
     async execute(interaction: BaseInteraction): Promise<void> {
-        // Dynamically handle slash commands
-        if (!interaction.isChatInputCommand()) return
+        if (interaction.isChatInputCommand()) {
+            if (!client.commands.has(interaction.commandName)) return
+            try {
+                const command: ApplicationCommand = (await client.commands.get(
+                    interaction.commandName
+                )) as ApplicationCommand
+                await command.execute(interaction)
+            } catch (error) {
+                console.error(error)
+                await interaction.reply({
+                    content: 'There was an error while executing this command!',
+                    ephemeral: true
+                })
+            }
+        } else if (interaction.isAutocomplete()) {
+            if (!client.commands.has(interaction.commandName)) return
 
-        if (!client.commands.has(interaction.commandName)) return
+            try {
+                const command: ApplicationCommand = (await client.commands.get(
+                    interaction.commandName
+                )) as ApplicationCommand
 
-        try {
-            const command: ApplicationCommand = (await client.commands.get(
-                interaction.commandName
-            )) as ApplicationCommand
-            await command.execute(interaction)
-        } catch (error) {
-            console.error(error)
-            await interaction.reply({
-                content: 'There was an error while executing this command!',
-                ephemeral: true
-            })
+                if (!command.autocomplete) {
+                    console.error(
+                        `Failed to find autocomplete handler for ${command.data.name}`
+                    )
+                    await interaction.respond([
+                        {
+                            name: 'Failed to autocomplete',
+                            value: 'error'
+                        }
+                    ])
+                    return
+                }
+
+                await command.autocomplete(interaction)
+            } catch (error) {
+                console.error(error)
+            }
         }
     }
 })

@@ -17,8 +17,10 @@ export default class ApplicationCommand {
         | ContextMenuCommandBuilder
         | SlashCommandSubcommandsOnlyBuilder
     hasSubCommands: boolean
-    execute: (interaction: ChatInputCommandInteraction) => Promise<void> | void
-    autocomplete: (interaction: AutocompleteInteraction) => Promise<void> | void
+    execute?: (interaction: ChatInputCommandInteraction) => Promise<void> | void
+    autocomplete?: (
+        interaction: AutocompleteInteraction
+    ) => Promise<void> | void
 
     /**
      * @param {{
@@ -71,13 +73,46 @@ export default class ApplicationCommand {
                     }
                 }
             }
-        } else if (options.execute) {
-            this.execute = options.execute
+
+            this.autocomplete = async (
+                interaction: AutocompleteInteraction
+            ) => {
+                const subCommandGroup = interaction.options.getSubcommandGroup()
+                const subCommandName = interaction.options.getSubcommand()
+
+                if (subCommandGroup || subCommandName) {
+                    try {
+                        const subCommand = (
+                            await import(
+                                `../subCommands/${this.data.name}/${
+                                    subCommandGroup ? `${subCommandGroup}/` : ''
+                                }${subCommandName}.js`
+                            )
+                        ).default as SubCommand
+                        if (subCommand.autocomplete) {
+                            await subCommand.autocomplete(interaction)
+                        }
+                    } catch (error) {
+                        console.error(error)
+                        await interaction.respond([
+                            {
+                                name: 'Failed to autocomplete',
+                                value: ''
+                            }
+                        ])
+                    }
+                }
+            }
+        } else if (options.autocomplete) {
+            this.autocomplete = options.autocomplete
         } else {
             throw new Error('No execute function provided')
         }
 
         this.data = options.data
+        if (!options.hasSubCommands) {
+            this.autocomplete = options.autocomplete
+        }
         this.hasSubCommands = options.hasSubCommands ?? false
         this.autocomplete = options.autocomplete ?? (() => {})
     }
