@@ -11,6 +11,19 @@ export default new Event({
                 const command: ApplicationCommand = (await client.commands.get(
                     interaction.commandName
                 )) as ApplicationCommand
+
+                if (!command.execute) {
+                    console.error(
+                        `Failed to find execution handler for ${command.data.name}`
+                    )
+                    await interaction.reply({
+                        content:
+                            'There was an error while executing this command!',
+                        ephemeral: true
+                    })
+                    return
+                }
+
                 await command.execute(interaction)
             } catch (error) {
                 console.error(error)
