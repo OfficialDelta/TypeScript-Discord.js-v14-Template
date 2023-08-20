@@ -103,6 +103,8 @@ export default class ApplicationCommand {
                     }
                 }
             }
+        } else if (options.execute) {
+            this.execute = options.execute
         } else if (options.autocomplete) {
             this.autocomplete = options.autocomplete
         } else {
@@ -114,6 +116,5 @@ export default class ApplicationCommand {
             this.autocomplete = options.autocomplete
         }
         this.hasSubCommands = options.hasSubCommands ?? false
-        this.autocomplete = options.autocomplete ?? (() => {})
     }
 }

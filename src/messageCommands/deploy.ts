@@ -37,7 +37,7 @@ export default new MessageCommand({
 
             for (const file of commandFiles) {
                 const command: ApplicationCommand = (
-                    await import(`./commands/${file}`)
+                    await import(`../commands/${file}`)
                 ).default as ApplicationCommand
                 const commandData = command.data.toJSON()
                 commands.push(commandData)
@@ -68,7 +68,7 @@ export default new MessageCommand({
 
             for (const file of commandFiles) {
                 const command: ApplicationCommand = (
-                    await import(`./commands/${file}`)
+                    await import(`../commands/${file}`)
                 ).default as ApplicationCommand
                 const commandData = command.data.toJSON()
                 commands.push(commandData)
