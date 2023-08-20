@@ -1,22 +1,28 @@
 # Typescript-Discord.js-v14-Template
 
-A quick-start template for Discord.js v14 in Typescript that contains handling for commands, events, and interactions!
+This repository provides a rapid deployment template for building Discord bots using Discord.js version 14 with Typescript. It includes ready-to-use code for handling commands, events, and interactions, so you can get your bot up and running quickly.
 
-## Installation
+## 📦 Installation
 
-1. Clone this project with `git clone https://github.com/TSLARoadster/Typescript-Discord.js-v14-Template/ YOUR_PROJECT_NAME`
-2. Rename `RENAME.env` to `.env`, and configure your `config.json` and `.env` files
-3. Follow the template to create commands for your bot
+Follow these steps to get started:
 
-## Building
+1. **Clone the Repository:** Use the command below to clone the project.
+   ```bash
+   git clone https://github.com/OfficialDelta/Typescript-Discord.js-v14-Template.git YOUR_PROJECT_NAME
+   ```
 
-Use the scripts provided in the `package.json` file
+2. **Configure Environment:** Rename `RENAME.env` to `.env`, and update the `.env` and `config.json` files with the required settings specific to your bot.
 
-## ts-node Support
+3. **Customize Commands:** Follow the provided templates to create and customize commands for your bot. Everything is set up to make this process as smooth as possible.
 
-To use this with ts-node:
+## 🏗️ Building
 
-```bash
-cd src
-ts-node-esm --files index.ts
-```
+Use the predefined scripts in the `package.json` file to build and manage your project. These scripts streamline various tasks, such as compiling and linting.
+
+## ✉️ Support & Contributions
+
+Feel free to open issues or submit pull requests if you have suggestions, questions, or run into any problems. Your contributions are welcome!
+
+---
+
+Happy coding, and enjoy building your Discord bot with the Typescript-Discord.js-v14-Template! 🚀
