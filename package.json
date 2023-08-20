@@ -13,19 +13,19 @@
         "build": "npm run lint && npm run prettier && npm run compile && npm run copy"
     },
     "dependencies": {
-        "@discordjs/rest": "^1.0.1",
-        "discord.js": "^14.3.0",
-        "dotenv": "^16.0.1"
+        "@discordjs/rest": "^2.0.1",
+        "discord.js": "^14.13.0",
+        "dotenv": "^16.3.1"
     },
     "devDependencies": {
-        "@tsconfig/node18-strictest-esm": "^1.0.1",
-        "@typescript-eslint/eslint-plugin": "^5.35.1",
-        "@typescript-eslint/parser": "^5.34.0",
-        "eslint": "^8.23.0",
-        "eslint-config-prettier": "^8.5.0",
-        "husky": "^8.0.1",
-        "lint-staged": "^13.0.3",
-        "prettier": "^2.7.1",
-        "typescript": "^4.7.4"
+        "@tsconfig/node20": "^20.1.1",
+        "@typescript-eslint/eslint-plugin": "^6.4.0",
+        "@typescript-eslint/parser": "^6.4.0",
+        "eslint": "^8.47.0",
+        "eslint-config-prettier": "^9.0.0",
+        "husky": "^8.0.3",
+        "lint-staged": "^14.0.0",
+        "prettier": "^3.0.2",
+        "typescript": "^5.1.6"
     }
 }

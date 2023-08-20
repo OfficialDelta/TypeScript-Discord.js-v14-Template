@@ -1,7 +1,7 @@
 import {
     SlashCommandBuilder,
     SlashCommandSubcommandBuilder,
-    SlashCommandSubcommandGroupBuilder,
+    SlashCommandSubcommandGroupBuilder
 } from 'discord.js'
 import ApplicationCommand from '../templates/ApplicationCommand.js'
 
@@ -24,5 +24,5 @@ export default new ApplicationCommand({
                 .setName('test')
                 .setDescription('A test subcommand')
         ),
-    hasSubCommands: true,
+    hasSubCommands: true
 })

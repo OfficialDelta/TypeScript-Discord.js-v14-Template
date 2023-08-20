@@ -18,12 +18,13 @@ global.client = Object.assign(
             GatewayIntentBits.Guilds,
             GatewayIntentBits.GuildMessages,
             GatewayIntentBits.DirectMessages,
+            GatewayIntentBits.MessageContent
         ],
-        partials: [Partials.Channel],
+        partials: [Partials.Channel]
     }),
     {
         commands: new Collection<string, ApplicationCommand>(),
-        msgCommands: new Collection<string, MessageCommand>(),
+        msgCommands: new Collection<string, MessageCommand>()
     }
 )
 

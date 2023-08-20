@@ -19,8 +19,8 @@ export default new Event({
             console.error(error)
             await interaction.reply({
                 content: 'There was an error while executing this command!',
-                ephemeral: true,
+                ephemeral: true
             })
         }
-    },
+    }
 })

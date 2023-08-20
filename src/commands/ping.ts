@@ -7,5 +7,5 @@ export default new ApplicationCommand({
         .setDescription('Replies pong!'),
     async execute(interaction): Promise<void> {
         await interaction.reply('Pong!')
-    },
+    }
 })

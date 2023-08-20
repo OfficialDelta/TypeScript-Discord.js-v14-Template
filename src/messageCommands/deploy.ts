@@ -4,27 +4,28 @@ import type ApplicationCommand from '../templates/ApplicationCommand.js'
 import MessageCommand from '../templates/MessageCommand.js'
 import { REST } from '@discordjs/rest'
 import { RESTPostAPIApplicationCommandsJSONBody, Routes } from 'discord.js'
-const { TOKEN, CLIENT_ID } = process.env as {
+import { default as config } from '../config.json' assert { type: 'json' }
+
+const { TOKEN, CLIENT_ID, OWNER_ID } = process.env as {
     TOKEN: string
     CLIENT_ID: string
+    OWNER_ID: string
 }
-
-const { prefix } = await import('../config.json', {
-    assert: { type: 'json' },
-})
 
 export default new MessageCommand({
     name: 'deploy',
     description: 'Deploys the slash commands',
     async execute(message, args): Promise<void> {
-        if (message.author.id !== client.application?.owner?.id) return
+        if (message.author.id !== OWNER_ID) return
 
         if (!args[0]) {
-            await message.reply(
-                `Incorrect number of arguments! The correct format is \`${prefix}deploy <guild/global>\``
-            )
+            await message.reply({
+                content: `Incorrect number of arguments! The correct format is \`${config.prefix}deploy <guild/global>\``
+            })
             return
         }
+
+        console.log(`Undeploying commands by ${message.author.tag}!}`)
 
         if (args[0].toLowerCase() === 'global') {
             // global deployment
@@ -48,7 +49,7 @@ export default new MessageCommand({
                 console.log('Started refreshing application (/) commands.')
 
                 await rest.put(Routes.applicationCommands(CLIENT_ID), {
-                    body: commands,
+                    body: commands
                 })
 
                 console.log('Successfully reloaded application (/) commands.')
@@ -56,7 +57,7 @@ export default new MessageCommand({
                 console.error(error)
             }
 
-            await message.reply('Deploying!')
+            await message.reply({ content: 'Deploying!' })
         } else if (args[0].toLowerCase() === 'guild') {
             // guild deployment
 
@@ -84,7 +85,7 @@ export default new MessageCommand({
                         message.guild?.id as string
                     ),
                     {
-                        body: commands,
+                        body: commands
                     }
                 )
 
@@ -93,7 +94,7 @@ export default new MessageCommand({
                 console.error(error)
             }
 
-            await message.reply('Deploying!')
+            await message.reply({ content: 'Deploying!' })
         }
-    },
+    }
 })
