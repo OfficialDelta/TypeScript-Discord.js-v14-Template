@@ -8,9 +8,13 @@
         "prepare": "husky install",
         "lint": "eslint --cache --fix src",
         "prettier": "prettier --write src",
-        "compile": "tsc",
-        "copy": "cp src/.env dist",
-        "build": "npm run lint && npm run prettier && npm run compile && npm run copy"
+        "compile": "tsc && npm run copy",
+        "clean": "rimraf dist/",
+        "copy": "npx copyfiles -u 1 src/.env src/**/*.json dist/",
+        "build": "npm run lint && npm run prettier && npm run clean && npm run compile",
+        "start": "npx copyfiles -u 1 src/.env src/**/*.json dist/ && cd dist && node . && cd ..",
+        "dev": "npm run clean && tsc-watch --onSuccess \"npm run start\"",
+        "prod": "npm run build && npm run start"
     },
     "dependencies": {
         "@discordjs/rest": "^2.0.1",
@@ -26,6 +30,8 @@
         "husky": "^8.0.3",
         "lint-staged": "^14.0.0",
         "prettier": "^3.0.2",
-        "typescript": "^5.1.6"
+        "typescript": "^5.1.6",
+        "rimraf": "^5.0.1",
+        "tsc-watch": "^6.0.4"
     }
 }
